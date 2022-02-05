@@ -1,0 +1,15 @@
+{
+  "name": "samboy_bot",
+  "version": "1.0.0",
+  "description": "This is a bot to manage  messages send to Samuel Muthembwa (+254 759 439032).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Samuel Munyoki Muthembwa",
+  "license": "ISC",
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#multidevice"
+  }
+}
