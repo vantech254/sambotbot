@@ -105,7 +105,7 @@ client.on('message', async msg => {
                     
                     console.log(query);
                     // var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"$format=json`;
-                    var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"&limit=10&namespace=0&format=json`;
+                    var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"&limit=5&namespace=0&format=json`;
                     req(url_wiki, function(err,response,  body){
                         if(err)
                         {
@@ -115,12 +115,12 @@ client.on('message', async msg => {
                             const content = JSON.parse(body);
                             for(var i = 0;i < content[1].length; i++ )
                             { 
-                                let data = `\nResult ${i+1}:  ${content[1][i]}: \n ${content[2][i]}\n *Follow link:* ${content[3][i]}\n\n`;
+                                let data = `\nResult ${i+1}:  ${content[1][i]}: ${content[2][i]}\n *Follow link:* ${content[3][i]}\n\n`;
                                 data1.push(data);
                                 
                             }
                             let wiki_data = data1.join();
-                            msg.reply("*🐶Available matches🐶*\n\n"+wiki_data);
+                            msg.reply("*🐶Available matches🐶*\n"+wiki_data+"\n~SamBot 👾");
                             // console.log(wiki_data);
                         }
                     });
