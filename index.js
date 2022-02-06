@@ -1,6 +1,7 @@
  const { Client, MessageMedia, Buttons } = require("whatsapp-web.js");
  const qrcode = require("qrcode-terminal");
 
+const req = require('request');
 
 const client = new Client({ puppeteer: { headless: false }, clientId: 'example' });
 client.initialize();
@@ -10,13 +11,9 @@ const repliedDms= [];
 const offlineReplyImage = MessageMedia.fromFilePath('./images/profilepic/dp.jpg');
 
 
-//Text and call button
-
-let altbutton = new Buttons('Alternative Method', [{ id: 'text', body: 'SMS' },{ id: 'call', body: 'Call' }]);
-
-
 client.on('qr', (qr) => {
-    // NOTE: This event will not be fired if a session is specified.
+    qrcode.generate(qr, {small: true});
+    
     console.log('QR RECEIVED', qr);
 });
 
@@ -41,9 +38,12 @@ client.on('message', async msg => {
     
     
     if(chatIdentifier == "@c.us" )
+    
+    
     {
         const alreadyreplied = repliedDms.find(element =>{
-            if(element.includes(numberIdentifier)){
+            if(element.includes(numberIdentifier))
+            {
                return true;
             }
             
@@ -55,7 +55,7 @@ client.on('message', async msg => {
         }
         if(alreadyreplied == undefined)
         {
-            repliedDms.push(...repliedDms, msg.from);
+                repliedDms.push(...repliedDms, msg.from);
                 console.log("User added to the list!");
                 console.log(repliedDms);
                 
@@ -63,18 +63,77 @@ client.on('message', async msg => {
                 
                 var date = new Date();
                 var hour = date.getHours();
-                if(hour == 12)
+                if(hour == 00)
                 {
                     repliedDms= [];
                 }
         }
         
+        if(msg.body == ".ping" || msg.body == ".pong" || msg.body == ".speed"  )
+        {
+                const  NetworkSpeed = require('network-speed');  // ES5
+                const testNetworkSpeed = new NetworkSpeed();
+                getNetworkDownloadSpeed();
+                
+    
+    
+                async function getNetworkDownloadSpeed() {
+                    const baseUrl = 'https://eu.httpbin.org/stream-bytes/500000';
+                    const fileSizeInBytes = 500000;
+                    const speed = await testNetworkSpeed.checkDownloadSpeed(baseUrl, fileSizeInBytes);
+                    Promise.all([speed]).then(values=>{
+                        let downspeed = values[0].mbps;
+                        msg.reply("Download speed is: *"+downspeed+ "* Megabytes per second.");
+                        
+                    });
+                }
+
+        }
+            
+        const wiki_msg = msg.body.split(" ");
+        console.log(wiki_msg[0]);
+        if( wiki_msg[0] == ".wiki")
+  
+                {
+                    let data1 = [];
+                    var query_raw = msg.body.split(" ");
+                    var query = query_raw[1];
+                    console.log(query);
+                    // var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"$format=json`;
+                    var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"&limit=10&namespace=0&format=json`;
+                    req(url_wiki, function(err,response,  body){
+                        if(err)
+                        {
+                            msg.reply("Internal server error!");
+                        }
+                        else{
+                            const content = JSON.parse(body);
+                            for(var i = 0;i < content[1].length; i++ )
+                            { 
+                                let data = `\nResult ${i+1}:  ${content[1][i]}: \n ${content[2][i]}\n *Follow link:* ${content[3][i]}\n\n`;
+                                data1.push(data);
+                                
+                            }
+                            let wiki_data = data1.join();
+                            msg.reply("*🐶Available matches🐶*\n\n"+wiki_data);
+                            // console.log(wiki_data);
+                        }
+                    });
+                }
+            
+
         
+
         
+
+
+        }
+        
+  
     }
 
     
-});
+);
 
 client.on('message_create', (msg) => {
     // Fired on all message creations, including your own
