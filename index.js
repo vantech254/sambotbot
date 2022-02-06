@@ -91,13 +91,18 @@ client.on('message', async msg => {
         }
             
         const wiki_msg = msg.body.split(" ");
-        console.log(wiki_msg[0]);
+        let arr_search = [];
+        for(var i = 1; i< wiki_msg.length; i++)
+        {
+            arr_search.push(wiki_msg[i]);
+        }
+        const query = arr_search.join( " ");
         if( wiki_msg[0] == ".wiki")
   
                 {
                     let data1 = [];
                     var query_raw = msg.body.split(" ");
-                    var query = query_raw[1];
+                    
                     console.log(query);
                     // var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"$format=json`;
                     var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"&limit=10&namespace=0&format=json`;
