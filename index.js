@@ -3,7 +3,7 @@
 
 const req = require('request');
 
-const client = new Client({ puppeteer: { headless: false }, clientId: 'example' });
+const client = new Client({ puppeteer: { headless: false, args: ["--no-sandbox"] }, clientId: 'example' });
 client.initialize();
 
 const repliedDms= [];
