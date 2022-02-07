@@ -160,7 +160,11 @@ client.on('message', async msg => {
                         {
                             let audio_url_chunk = parsed[0].phonetics[0].audio;
                             audio_url = "https:"+audio_url_chunk;
+                            if(typeof audio_url_chunk !== "undefined")
+                            {
+                                
                             sendAudio();
+                            }
                         }
                         
                         let array_res =[];
