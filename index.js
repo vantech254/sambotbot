@@ -1,5 +1,10 @@
- const { Client, MessageMedia, Buttons } = require("whatsapp-web.js");
- const qrcode = require("qrcode-terminal");
+import { createRequire } from "module";
+
+import{ createClient } from 'pexels' ;
+
+const require = createRequire(import.meta.url);
+const { Client, MessageMedia } = require("whatsapp-web.js");
+const qrcode = require("qrcode-terminal");
 
 const req = require('request');
 
@@ -13,7 +18,7 @@ const offlineReplyImage = MessageMedia.fromFilePath('./images/profilepic/dp.jpg'
 
 client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
-    
+
     console.log('QR RECEIVED', qr);
 });
 
@@ -30,13 +35,15 @@ client.on('ready', () => {
     console.log('SamBot Online');
 });
 
+
 //Replying Dms.
 client.on('message', async msg => {
     
     var chatIdentifier = msg.from.substring(msg.from.length-5);
     var  numberIdentifier = msg.from;
+    const command = msg.body.split(" ");
     
-    
+    // Messages send to my DM
     if(chatIdentifier == "@c.us" )
     
     
@@ -63,76 +70,175 @@ client.on('message', async msg => {
                 
                 var date = new Date();
                 var hour = date.getHours();
-                if(hour == 00)
+                if(hour == 12)
                 {
                     repliedDms= [];
                 }
         }
-        
-        if(msg.body == ".ping" || msg.body == ".pong" || msg.body == ".speed"  )
+
+
+
+
+        // Speed Test Module START
+        if(command[0] == ".ping" || command[0] == ".pong" || command[0] == ".speed"  )
         {
-                const  NetworkSpeed = require('network-speed');  // ES5
-                const testNetworkSpeed = new NetworkSpeed();
-                getNetworkDownloadSpeed();
-                
-    
-    
-                async function getNetworkDownloadSpeed() {
-                    const baseUrl = 'https://eu.httpbin.org/stream-bytes/500000';
-                    const fileSizeInBytes = 500000;
-                    const speed = await testNetworkSpeed.checkDownloadSpeed(baseUrl, fileSizeInBytes);
-                    Promise.all([speed]).then(values=>{
-                        let downspeed = values[0].mbps;
-                        msg.reply("Download speed is: *"+downspeed+ "* Megabytes per second.");
-                        
-                    });
-                }
-
-        }
+            const  NetworkSpeed = require('network-speed');  // ES5
+            const testNetworkSpeed = new NetworkSpeed();
+            getNetworkDownloadSpeed();
             
-        const wiki_msg = msg.body.split(" ");
-        console.log(wiki_msg[0]);
-        if( wiki_msg[0] == ".wiki")
-  
+
+
+            async function getNetworkDownloadSpeed() {
+                const baseUrl = 'https://eu.httpbin.org/stream-bytes/500000';
+                const fileSizeInBytes = 500000;
+                const speed = await testNetworkSpeed.checkDownloadSpeed(baseUrl, fileSizeInBytes);
+                Promise.all([speed]).then(values=>{
+                    let downspeed = values[0].mbps;
+                    msg.reply("Your Internet speed is: *"+downspeed+ "* Megabytes per second.");
+                });
+            }
+        }// Speed Test Module END
+        
+            
+        // Wikipedia search module Start
+        if( command[0] == ".wiki")
+            { 
+                let arr_search = [];
+                for(var i = 1; i< command.length; i++)
                 {
-                    let data1 = [];
-                    var query_raw = msg.body.split(" ");
-                    var query = query_raw[1];
-                    console.log(query);
-                    // var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"$format=json`;
-                    var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"&limit=10&namespace=0&format=json`;
-                    req(url_wiki, function(err,response,  body){
-                        if(err)
+                    arr_search.push(command[i]);
+                }
+                const query = arr_search.join( " ");
+
+                let data1 = [];
+                
+                
+                console.log(query);
+                
+                var url_wiki = `https://en.wikipedia.org/w/api.php?action=opensearch&search="+${query}+"&limit=10&format=json`;
+
+                req(url_wiki, function(err,response,  body){
+                    if(err)
+                    {
+                        msg.reply("Internal server error!");
+                    }
+                    else{
+                        const content = JSON.parse(body);
+                        for(var i = 0;i < content[1].length; i++ )
+                        { 
+                            let data = `\nResult ${i+1}:  ${content[1][i]}: \n ${content[2][i]}\n *Follow link:* ${content[3][i]}\n\n`;
+                            
+                            data1.push(data);
+                            
+                        }
+                        let wiki_data = data1.join();
+                        msg.reply("*🐶Available matches🐶*\n\n"+wiki_data);
+                        
+                    }
+                });
+            }
+        }// Wikipedia search module END
+
+        //Dictionary Module START
+        if(command[0] === ".dict")
+        {
+            var word = command[1];
+            var dictionary_api_url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+            req(dictionary_api_url, function(err,response,  body){
+                if(err)
+                {
+                    msg.reply("🆘 Internal Server Error!");
+                }else
+                {
+                    
+                    const parsed = JSON.parse(body);
+                    let phonetic = "";
+                    let audio_url = "";
+                    if(parsed instanceof Array)
+                    {
+                        
+                        if(typeof parsed[0].phonetic !== "undefined")
                         {
-                            msg.reply("Internal server error!");
+                            phonetic = parsed[0].phonetic;
                         }
-                        else{
-                            const content = JSON.parse(body);
-                            for(var i = 0;i < content[1].length; i++ )
-                            { 
-                                let data = `\nResult ${i+1}:  ${content[1][i]}: \n ${content[2][i]}\n *Follow link:* ${content[3][i]}\n\n`;
-                                data1.push(data);
-                                
-                            }
-                            let wiki_data = data1.join();
-                            msg.reply("*🐶Available matches🐶*\n\n"+wiki_data);
-                            // console.log(wiki_data);
+                        if(parsed[0].phonetics.length > 0)
+                        {
+                            let audio_url_chunk = parsed[0].phonetics[0].audio;
+                            audio_url = "https:"+audio_url_chunk;
+                            sendAudio();
                         }
-                    });
+                        
+                        let array_res =[];
+                        for(var i=0; i<parsed[0].meanings.length; i++)
+                        {
+                            var partOfSpeech = "*"+parsed[0].meanings[i].partOfSpeech.toUpperCase()+"*: ";
+                            var definition = parsed[0].meanings[i].definitions[0].definition;
+                            array_res.push([partOfSpeech, definition])
+                        }
+                        for(var i = 0; i<array_res.length; i++)
+                        {
+                            array_res[i].join(" ");
+                            
+                            console.log(array_res[i]);
+                        }
+                        let sentence = "";
+                        for(var i = 0; i<array_res.length; i++)
+                        {
+                            sentence +=array_res[i]+"\n";
+                        }
+                        msg.reply("*SamBot 👾 Dictionary*\n\n"+"*PHONETIC:* "+phonetic+"\n"+sentence);
+                        
+                    }else{
+                        msg.reply("No Definitions Found.\nTry again later.");
+                    }
+                    async function sendAudio()
+                    {
+                        const audio_file = await MessageMedia.fromUrl(audio_url);
+                        msg.reply(audio_file);
+                    }
+                   
                 }
             
-
-        
-
-        
-
-
+            });
         }
-        
-  
-    }
 
-    
+        //Dictionary Module END
+
+
+        //Pexels Images Module START
+
+
+        if(command[0] ==".image")
+        {
+            
+            const api_key = process.env.PEXELS_API_KEY;
+            const client = createClient("563492ad6f91700001000001969625337de74aaaa0cf46f2013fec74");
+            const query = command[1];
+            
+            client.photos.search({ query, per_page: 1 }).then(photos => {
+                const parsed_pexels = JSON.parse(JSON.stringify(photos));
+                console.log(parsed_pexels.photos[0].url);
+                sendImage();
+                async function sendImage()
+                    {
+                        let image_url = parsed_pexels.photos[0].url;
+                        const image_file = await MessageMedia.fromUrl(image_url, {unsafeMime: true});
+                        msg.reply(image_file);
+                    }
+                
+
+            });
+            
+            
+        }
+
+        //Pexels Images Module END
+
+
+
+        
+    }//Messages send to DM END
+ 
 );
 
 client.on('message_create', (msg) => {
