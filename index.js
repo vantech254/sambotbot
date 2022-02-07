@@ -188,8 +188,16 @@ client.on('message', async msg => {
                     }
                     async function sendAudio()
                     {
-                        const audio_file = await MessageMedia.fromUrl(audio_url, {unsafeMime: true});
-                        msg.reply(audio_file);
+                        if(typeof audio_url !== "undefined")
+                        {
+                            
+                             const audio_file = await MessageMedia.fromUrl(audio_url, {unsafeMime: true});
+                             msg.reply(audio_file);
+                        }
+                        else{
+                            msg.reply("Could not fetch audio!");
+                        }
+                        
                     }
                    
                 }
