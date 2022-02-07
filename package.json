@@ -1,7 +1,6 @@
 {
   "name": "samboy_bot",
   "version": "1.0.0",
-  "type": "module",
   "description": "This is a bot to manage  messages send to Samuel Muthembwa (+254 759 439032).",
   "main": "index.js",
   "scripts": {

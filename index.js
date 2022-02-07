@@ -1,14 +1,14 @@
-import { createRequire } from "module";
+// import { createRequire } from "module";
 
-import{ createClient } from 'pexels' ;
+// import{ createClient } from 'pexels' ;
 
-const require = createRequire(import.meta.url);
+// const require = createRequire(import.meta.url);
 const { Client, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
 const req = require('request');
 
-const client = new Client({ puppeteer: { headless: false }, clientId: 'example' });
+const client = new Client({ puppeteer: { headless: true, args:["--no-args"] }, clientId: 'example' });
 client.initialize();
 
 const repliedDms= [];
@@ -208,29 +208,29 @@ client.on('message', async msg => {
         //Pexels Images Module START
 
 
-        if(command[0] ==".image")
-        {
+        // if(command[0] ==".image")
+        // {
             
-            const api_key = process.env.PEXELS_API_KEY;
-            const client = createClient("563492ad6f91700001000001969625337de74aaaa0cf46f2013fec74");
-            const query = command[1];
+        //     const api_key = process.env.PEXELS_API_KEY;
+        //     const client = createClient("563492ad6f91700001000001969625337de74aaaa0cf46f2013fec74");
+        //     const query = command[1];
             
-            client.photos.search({ query, per_page: 1 }).then(photos => {
-                const parsed_pexels = JSON.parse(JSON.stringify(photos));
-                console.log(parsed_pexels.photos[0].url);
-                sendImage();
-                async function sendImage()
-                    {
-                        let image_url = parsed_pexels.photos[0].url;
-                        const image_file = await MessageMedia.fromUrl(image_url, {unsafeMime: true});
-                        msg.reply(image_file);
-                    }
+        //     client.photos.search({ query, per_page: 1 }).then(photos => {
+        //         const parsed_pexels = JSON.parse(JSON.stringify(photos));
+        //         console.log(parsed_pexels.photos[0].url);
+        //         sendImage();
+        //         async function sendImage()
+        //             {
+        //                 let image_url = parsed_pexels.photos[0].url;
+        //                 const image_file = await MessageMedia.fromUrl(image_url, {unsafeMime: true});
+        //                 msg.reply(image_file);
+        //             }
                 
 
-            });
+        //     });
             
             
-        }
+        // }
 
         //Pexels Images Module END
 
