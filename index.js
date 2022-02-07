@@ -8,7 +8,7 @@ const qrcode = require("qrcode-terminal");
 
 const req = require('request');
 
-const client = new Client({ puppeteer: { headless: true, args:["--no-args"] }, clientId: 'example' });
+const client = new Client({ puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
 client.initialize();
 
 const repliedDms= [];
