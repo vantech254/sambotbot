@@ -2,7 +2,7 @@ const { Client, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 const http = require('http');
 const fs = require('fs');
-
+const port  = process.env.PORT || 80;
 
 //Creating an HTTP server
 http.createServer((req, res)=>{
@@ -17,7 +17,7 @@ http.createServer((req, res)=>{
         res.writeHead(200);
         res.end(data);
     })
-}).listen(80);
+}).listen(port);
 
 
 const req = require('request');
