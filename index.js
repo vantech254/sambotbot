@@ -13,21 +13,9 @@ const repliedDms= [];
 //Loading image
 const offlineReplyImage = MessageMedia.fromFilePath('./images/profilepic/dp.jpg');
 
-//Statis Middleware
-app.use(express.static(path.join(__dirname, 'public')));
-//View engine 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.get('/', function(req, res){
-    res.render('Index');
-});
-
-app.listen(80, function(error){
-    if(error)throw error
-    console.log("Server is running...");
-})
-
+setInterval( () =>{
+    console.log("Server Keep Awake call...");
+},3000);
 client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
 
