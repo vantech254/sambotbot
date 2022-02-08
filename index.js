@@ -1,8 +1,24 @@
 const { Client, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
-const express = require('express');
-const path = require('path');
-const app = express();
+const http = require('http');
+const fs = require('fs');
+
+
+//Creating an HTTP server
+http.createServer((req, res)=>{
+    const filePath = __dirname+(req.url==='/' ? 'awake.html' : req.url);
+    fs.readFile(filePath, (err, data)=>{
+        if(err){
+            res.writeHead(404);
+            res.end(JSON.stringify(err));
+            return
+        
+        }
+        res.writeHead(200);
+        res.end(data);
+    })
+}).listen(80);
+
 
 const req = require('request');
 
@@ -13,20 +29,6 @@ const repliedDms= [];
 //Loading image
 const offlineReplyImage = MessageMedia.fromFilePath('./images/profilepic/dp.jpg');
 
-//Statis Middleware
-app.use(express.static(path.join(__dirname, 'public')));
-//View engine 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.get('/', function(req, res){
-    res.render('Index');
-});
-
-app.listen(80, function(error){
-    if(error)throw error
-    console.log("Server is running...");
-})
 
 client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
