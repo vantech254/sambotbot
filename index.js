@@ -5,8 +5,11 @@ const fs = require('fs');
 const port  = process.env.PORT || 80;
 
 //Creating an HTTP server
+let filePath="";
 http.createServer((req, res)=>{
-    const filePath = __dirname+(req.url==='/' ? 'awake.html' : req.url);
+    if(req.url == '/'){
+        filePath = "./awake.html";
+    }
     fs.readFile(filePath, (err, data)=>{
         if(err){
             res.writeHead(404);
