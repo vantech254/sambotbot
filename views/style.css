@@ -1,0 +1,13 @@
+.main_boy
+{
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    color: blue;
+
+}
+.main_boy h4 span{
+    color: red;
+    font-size: small;
+}

@@ -1,20 +1,32 @@
-// import { createRequire } from "module";
-
-// import{ createClient } from 'pexels' ;
-
-// const require = createRequire(import.meta.url);
 const { Client, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
+const express = require('express');
+const path = require('path');
+const app = express();
 
 const req = require('request');
 
-const client = new Client({ puppeteer: { headless: true, args:["--no-args"] }, clientId: 'example' });
+const client = new Client({ puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
 client.initialize();
 
 const repliedDms= [];
 //Loading image
 const offlineReplyImage = MessageMedia.fromFilePath('./images/profilepic/dp.jpg');
 
+//Statis Middleware
+app.use(express.static(path.join(__dirname, 'public')));
+//View engine 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.get('/', function(req, res){
+    res.render('Index');
+});
+
+app.listen(80, function(error){
+    if(error)throw error
+    console.log("Server is running...");
+})
 
 client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
@@ -165,7 +177,13 @@ client.on('message', async msg => {
                         {
                             let audio_url_chunk = parsed[0].phonetics[0].audio;
                             audio_url = "https:"+audio_url_chunk;
+                            if(typeof audio_url_chunk !== "undefined")
+                            {
+                                
                             sendAudio();
+                            }else{
+                                msg.reply("No voice note available...");
+                            }
                         }
                         
                         let array_res =[];
@@ -193,8 +211,16 @@ client.on('message', async msg => {
                     }
                     async function sendAudio()
                     {
-                        const audio_file = await MessageMedia.fromUrl(audio_url);
-                        msg.reply(audio_file);
+                        if(typeof audio_url !== "undefined")
+                        {
+                            
+                             const audio_file = await MessageMedia.fromUrl(audio_url, {unsafeMime: true});
+                             msg.reply(audio_file);
+                        }
+                        else{
+                            msg.reply("Could not fetch audio!");
+                        }
+                        
                     }
                    
                 }
@@ -205,36 +231,7 @@ client.on('message', async msg => {
         //Dictionary Module END
 
 
-        //Pexels Images Module START
-
-
-        // if(command[0] ==".image")
-        // {
-            
-        //     const api_key = process.env.PEXELS_API_KEY;
-        //     const client = createClient("563492ad6f91700001000001969625337de74aaaa0cf46f2013fec74");
-        //     const query = command[1];
-            
-        //     client.photos.search({ query, per_page: 1 }).then(photos => {
-        //         const parsed_pexels = JSON.parse(JSON.stringify(photos));
-        //         console.log(parsed_pexels.photos[0].url);
-        //         sendImage();
-        //         async function sendImage()
-        //             {
-        //                 let image_url = parsed_pexels.photos[0].url;
-        //                 const image_file = await MessageMedia.fromUrl(image_url, {unsafeMime: true});
-        //                 msg.reply(image_file);
-        //             }
-                
-
-        //     });
-            
-            
-        // }
-
-        //Pexels Images Module END
-
-
+   
 
         
     }//Messages send to DM END
