@@ -33,7 +33,7 @@ let client;
 if(fs.existsSync(SESSION_PATH))
 {
     sessionData = require(SESSION_PATH);
-    client = new Client({session: sessionData, puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' }});
+    client = new Client({session: sessionData, puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
 }
 else{
     client = new Client({session:
@@ -61,19 +61,8 @@ client.on('qr', (qr) => {
 });
 
 client.on('authenticated', (session) => {
-    sessionData = session;
-    const fd = fs.openSync("session.json", "w");
-    const position = 0;
-    fs.writeSync(fd, JSON.stringify(session), position, (err)=>{
-        if(err){
-            console.log( "Session Store Error..");
-            console.log(err);
-        }
-        else{
-            console.log("Session Stored Sucessfully.");
-        }
-    })
-    console.log('AUTHENTICATED');
+
+    console.log('AUTHENTICATED', session);
 });
 
 client.on('auth_failure', msg => {
