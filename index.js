@@ -45,7 +45,7 @@ else{
                         },
                 puppeteer: { 
                         headless: true, args:["--no-sandbox"] }, clientId: 'example' }
-                        });
+                        );
 }
 client.initialize();
 
