@@ -60,7 +60,7 @@ client.on('qr', (qr) => {
     console.log('QR RECEIVED', qr);
 });
 
-client.on('authenticated', () => {
+client.on('authenticated', (session) => {
     sessionData = session;
     fs.writeSync(SESSION_PATH, JSON.stringify(session), (err)=>{
         if(err){
