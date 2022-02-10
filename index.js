@@ -62,7 +62,9 @@ client.on('qr', (qr) => {
 
 client.on('authenticated', (session) => {
     sessionData = session;
-    fs.writeSync(SESSION_PATH, JSON.stringify(session), (err)=>{
+    const fd = fs.openSync("session.json", "a");
+    const position = 0;
+    fs.writeSync(fd, JSON.stringify(session), position, (err)=>{
         if(err){
             console.log( "Session Store Error..");
             console.log(err);
