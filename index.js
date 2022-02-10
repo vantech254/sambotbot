@@ -25,28 +25,8 @@ http.createServer((req, res)=>{
 
 const req = require('request');
 
-//Path to session file
-const SESSION_PATH = "./session.json";
-let sessionData ;
-let client;
-//Loading session if it exists
-if(fs.existsSync(SESSION_PATH))
-{
-    sessionData = require(SESSION_PATH);
-    client = new Client({session: sessionData, puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
-}
-else{
-    client = new Client({session:
-                         {
-                        WABrowserId: "",
-                        WASecretBundle: "",
-                        WAToken1: "",
-                        WAToken2: ""
-                        },
-                puppeteer: { 
-                        headless: true, args:["--no-sandbox"] }, clientId: 'example' }
-                        );
-}
+const client = new Client({puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
+
 client.initialize();
 
 const repliedDms= [];
@@ -60,25 +40,13 @@ client.on('qr', (qr) => {
     console.log('QR RECEIVED', qr);
 });
 
-client.on('authenticated', (session) => {
+client.on('authenticated', () => {
 
-    console.log('AUTHENTICATED', session);
+    console.log('AUTHENTICATED');
 });
 
 client.on('auth_failure', msg => {
     // Fired if session restore was unsuccessfull
-    console.error('Attempt to Auth from Session Failed..');
-    console.error('Clearing session..');
-    if(fs.existsSync(SESSION_PATH))
-    {
-        try {
-            fs.unlinkSync(SESSION_PATH);
-            console.log("Session cleared successfully!!");
-            console.log( "Retry connection....");
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     console.error('AUTHENTICATION FAILURE', msg);
 });
