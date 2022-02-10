@@ -62,7 +62,7 @@ client.on('qr', (qr) => {
 
 client.on('authenticated', (session) => {
     sessionData = session;
-    const fd = fs.openSync("session.json", "a");
+    const fd = fs.openSync("session.json", "w");
     const position = 0;
     fs.writeSync(fd, JSON.stringify(session), position, (err)=>{
         if(err){
