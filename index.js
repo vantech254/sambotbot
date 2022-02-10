@@ -33,10 +33,19 @@ let client;
 if(fs.existsSync(SESSION_PATH))
 {
     sessionData = require(SESSION_PATH);
-    client = new Client({session: sessionData, puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
+    client = new Client({session: sessionData, puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' }});
 }
 else{
-    client = new Client({puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
+    client = new Client({session:
+                         {
+                        WABrowserId: "",
+                        WASecretBundle: "",
+                        WAToken1: "",
+                        WAToken2: ""
+                        },
+                puppeteer: { 
+                        headless: true, args:["--no-sandbox"] }, clientId: 'example' }
+                        });
 }
 client.initialize();
 
