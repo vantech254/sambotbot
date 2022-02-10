@@ -2,7 +2,7 @@ const { Client, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 const http = require('http');
 const fs = require('fs');
-const port  = process.env.PORT || 80;
+const port  = process.env.PORT || 3000;
 
 //Creating an HTTP server
 let filePath="";
@@ -25,7 +25,19 @@ http.createServer((req, res)=>{
 
 const req = require('request');
 
-const client = new Client({ puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
+//Path to session file
+const SESSION_PATH = "./session.json";
+let sessionData ;
+let client;
+//Loading session if it exists
+if(fs.existsSync(SESSION_PATH))
+{
+    sessionData = require(SESSION_PATH);
+    client = new Client({session: sessionData, puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
+}
+else{
+    client = new Client({puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
+}
 client.initialize();
 
 const repliedDms= [];
@@ -40,11 +52,34 @@ client.on('qr', (qr) => {
 });
 
 client.on('authenticated', () => {
+    sessionData = session;
+    fs.writeSync(SESSION_PATH, JSON.stringify(session), (err)=>{
+        if(err){
+            console.log( "Session Store Error..");
+            console.log(err);
+        }
+        else{
+            console.log("Session Stored Sucessfully.");
+        }
+    })
     console.log('AUTHENTICATED');
 });
 
 client.on('auth_failure', msg => {
     // Fired if session restore was unsuccessfull
+    console.error('Attempt to Auth from Session Failed..');
+    console.error('Clearing session..');
+    if(fs.existsSync(SESSION_PATH))
+    {
+        try {
+            fs.unlinkSync(SESSION_PATH);
+            console.log("Session cleared successfully!!");
+            console.log( "Retry connection....");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     console.error('AUTHENTICATION FAILURE', msg);
 });
 
