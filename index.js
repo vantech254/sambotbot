@@ -306,3 +306,4 @@ client.on('change_state', state => {
 client.on('disconnected', (reason) => {
     console.log('Client was logged out', reason);
 });
+console.log(client.getState());
