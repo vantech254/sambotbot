@@ -271,7 +271,8 @@ client.on('message', async msg => {
                     ;
               
                     let raw_url = String(command[0]) ;
-                    let main_url = raw_url.slice(5);
+                    let main = raw_url.slice(8);
+                    let main_url = "www."+main;
 
                     validator.validateUrl(main_url, function(res, err) {
                     if(err) //err
