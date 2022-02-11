@@ -59,7 +59,7 @@ client.on('message', async msg => {
                 console.log("User added to the list!");
                 console.log(repliedDms);
                 
-                client.sendMessage(msg.from, offlineReplyImage, {caption: "*Hi there*👋🏿👋🏿👋🏿\n\nI am *SamBot*, you are getting this message because he is offline or currently busy.🤓\nHe will text you back soon!\n\n~SamBot 👾"});
+                client.sendMessage(msg.from, offlineReplyImage, {caption: "*Hi there*👋🏿👋🏿👋🏿\n\nI am *VanTech⚡*, you are getting this message because he is offline or currently busy.🤓\nHe will text you back soon!\n\n~VanTech⚡"});
                 
                 var date = new Date();
                 var hour = date.getHours();
