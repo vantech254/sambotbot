@@ -286,8 +286,8 @@ client.on('message', async msg => {
                         axios.get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
                         .then(async (a) => {
                            
-                            client.sendMediaURL(msg.from, thumb )
-                            client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
+                             client.sendMessage(msg.from, thumb )
+                             client.sendMessage(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
                             }) 
                         }).catch(client.sendMessage(numberIdentifier ,"SamBot 👾: [ ! ] Couldn't fetch Video..."))
                     } catch (err) {
@@ -309,8 +309,8 @@ client.on('message', async msg => {
                         axios
                             .get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
                             .then((a) => {
-                            client.sendMediaURL(numberIdentifier, thumb);
-                            client.sendMediaURL(numberIdentifier, dl_link).catch(() => {client.sendMessage(numberIdentifier,"SamBot 👾: [!] Couldn't fetch Video...")});
+                             client.sendMessage(numberIdentifier, thumb);
+                             client.sendMessage(numberIdentifier, dl_link).catch(() => {client.sendMessage(numberIdentifier,"SamBot 👾: [!] Couldn't fetch Video...")});
                             });
                         }).catch(client.sendMessage(numberIdentifier,"SamBot 👾: [ ! ] Couldn't fetch Video..."));
                     } catch (err) {
