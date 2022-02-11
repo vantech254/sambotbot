@@ -1,12 +1,12 @@
 {
-  "name": "samboy_bot",
+  "name": "VanTech⚡_bot",
   "version": "1.0.0",
-  "description": "This is a bot to manage  messages send to Samuel Muthembwa (+254 759 439032).",
+  "description": "This is a bot to manage  messages send to Samuel Muthembwa (+254 759 393905).",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Samuel Munyoki Muthembwa",
+  "author": "VANTECH⚡",
   "license": "ISC",
   "dependencies": {
     "qrcode-terminal": "^0.12.0",
