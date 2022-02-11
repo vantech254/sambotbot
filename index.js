@@ -192,7 +192,7 @@ client.on('message', async msg => {
                         {
                             sentence +=array_res[i]+"\n";
                         }
-                        msg.reply("*SamBot 👾 Dictionary*\n\n"+"*PHONETIC:* "+phonetic+"\n"+sentence);
+                        msg.reply("*VanTechBot⚡ Dictionary*\n\n"+"*PHONETIC:* "+phonetic+"\n"+sentence);
                         
                     }else{
                         msg.reply("No Definitions Found.\nTry again later.");
