@@ -232,7 +232,7 @@ client.on('message', async msg => {
             case ".ytsearch":
                 if(command.length == 1)
                 {
-                    msg.reply("[!] Enter a search term...\n e.g .ytsearch Obama");
+                    msg.reply("[ ! ] Enter a search term...\n e.g .ytsearch Obama");
                 }
                 else{
                     var arr_search = [];
@@ -306,7 +306,7 @@ client.on('message', async msg => {
                     );
                     if (!yt_video_link)
                     {
-                        msg.reply("[!] You did not provide a youtube link...");
+                        msg.reply("[ ! ] You did not provide a youtube link...");
                     }
                     try {
                         msg.reply("SamBot 👾 Fetching video...");
@@ -316,18 +316,18 @@ client.on('message', async msg => {
                             .get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
                             .then((a) => {
                             if (Number(filesize) >= 9999999)
-                                return sendMediaURL(
-                                from,
+                                return client.sendMediaURL(
+                                msg.from,
                                 thumb,
                                 `*SamBot 👾 Video Fetcher*\n\n*Title* : ${title}\n*Ext* : MP3\n*Filesize* : ${filesizeF}\n*Link* : ${a.data}\n\n_For the duration of more than the limit is presented in the link_`
                                 );
                             const captionsYtmp4 = `*Your video Request*\n\n*Title* : ${title}\n*Ext* : MP4\n*Size* : ${filesizeF}\n\n_Please wait for the media file to be sent it may take a few minutes_`;
                             client.sendMediaURL(msg.from, thumb, captionsYtmp4);
-                            client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
+                            client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [ ! ] Couldn't fetch Video...")});
                             });
                         });
                     } catch (err) {
-                        msg.reply("SamBot 👾: [!] Couldn't fetch Video...")
+                        msg.reply("SamBot 👾: [ ! ] Couldn't fetch Video...")
                     }
                     break;   
                     
