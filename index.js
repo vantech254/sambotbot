@@ -2,11 +2,10 @@ const { Client, MessageMedia } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 const http = require('http');
 const fs = require('fs');
-const axios = require('axios');
 const request = require('request');
 const colors = require('./lib/colors');
-const {getBuffer} = require('./lib/functions');
-const {ytaudio, ytvideo} = require("./lib/ytdl");
+const ytdl = require('ytdl-core');
+const validator = require('youtube-validator')
 const yts = require("yt-search");
 
 
@@ -83,12 +82,12 @@ client.on('message', async msg => {
             }
             
         });
-        if(alreadyreplied !== undefined)
+        if(typeof alreadyreplied !== "undefined")
         {
             console.log("User is in the list!");
             console.log(repliedDms);
         }
-        if(alreadyreplied == undefined)
+        if(typeof alreadyreplied == "undefined")
         {
             repliedDms.push(...repliedDms, msg.from);
             console.log("User added to the list!");
@@ -263,59 +262,55 @@ client.on('message', async msg => {
                     
                 }
                 break;
-            //Youtube to mp3
-            case ".ytmp3":
-            case ".audio":
-                if (command.length === 0)
-                {
-                    msg.reply("[ ! ] You did not provide a song title....");
-                }
-                var arr_search = [];
-                for(var i = 1; i< command.length; i++)
-                {
-                    arr_search.push(command[i]);
-                }
-                var query = arr_search.join( " ");
-                let yt_search = await yts(query);
-                var yt_result = yt_search.all;
-                var yt_url = yt_result[0].url;
-                try {
-                    ytaudio(yt_url)
-                    .then((res) => {
-                        const { dl_link, thumb} = res;
-                        axios.get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
-                        .then(async (a) => {
-                           
-                             client.sendMessage(msg.from, thumb )
-                             client.sendMessage(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
-                            }) 
-                        }).catch(client.sendMessage(numberIdentifier ,"SamBot 👾: [ ! ] Couldn't fetch Video..."))
-                    } catch (err) {
-                        client.sendMessage(numberIdentifier,'[ ! ] Internal server error...');
-                        }
-                break; 
+
                 case ".ytmp4":
                 case ".video":
                     if (command.length === 0)
                     {
-                       client.sendMessage(numberIdentifier,"[!] You did not provide a youtube link...");
+                        msg.reply("[!] You did not provide a youtube link...");
                     }
-    
-                   
-                    try {
-                        msg.reply("SamBot 👾 Fetching video...");
-                        ytvideo(command[1]).then((res) => {
-                        const { dl_link, thumb} = res;
-                        axios
-                            .get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
-                            .then((a) => {
-                             client.sendMessage(numberIdentifier, thumb);
-                             client.sendMessage(numberIdentifier, dl_link).catch(() => {client.sendMessage(numberIdentifier,"SamBot 👾: [!] Couldn't fetch Video...")});
+                    ;
+              
+                    let raw_url = String(command[0]) ;
+                    let main_url = raw_url.slice(5);
+
+                    validator.validateUrl(main_url, function(res, err) {
+                    if(err) //err
+                    {
+                        msg.reply("[ ! ] Inavalid Url link")
+                    }
+                    else
+                        {
+                        let res_url = "http://www.youtube.com"+res;
+                        console.log(res_url);
+                        let user_video = (Math.random() + 1).toString(36).substring(7)+".mp4";
+                            
+                        async function ytvideo(yt_url){
+                            let data_url = yt_url;
+                            return await new Promise((resolve) => {
+                                ytdl(data_url, { filter: format => format.container === 'mp4'}).on('progress', (length, downloaded, totalLength) => {
+                                const progress = (downloaded/totalLength) * 100;
+                                if(progress >= 100) {
+                                    console.log("Download conplete.")
+                                    
+                                }
+                                }).pipe(fs.createWriteStream(user_video))
+                                .on('finish', () => {
+                                resolve();
+                                })
                             });
-                        }).catch(client.sendMessage(numberIdentifier,"SamBot 👾: [ ! ] Couldn't fetch Video..."));
-                    } catch (err) {
-                        client.sendMessage(numberIdentifier, "SamBot 👾: [ ! ] Couldn't fetch Video...");
+                            
+                        }
+                        ytvideo(res_url).then(()=>{
+                            msg.reply("SamBot 👾 Fetching result now...");
+                            const sendVideo = MessageMedia.fromFilePath(user_video);
+                            msg.reply(sendVideo, {caption: "SamBot 👾 Found your video."})
+                        }).catch(()=>{
+                            msg.reply("SamBot 👾 [ ! ] Couldn't get video.");
+                        })
+                        
                     }
+                    })
                     break;   
                     
             case ".help":
