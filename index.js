@@ -259,7 +259,7 @@ client.on('message', async msg => {
                         "*Upload:* " + video.ago + "\n________________________\n\n";
                     });
                     //let thumbail = MessageMedia.fromFilePath("./images/thumbnails/yt_thumb.jpg");
-                    client.sendMessage(numberIdentifier, tbuff, {caption: ytresult} );
+                    client.sendMessage(numberIdentifier,  ytresult );
                     
                 }
                 break;
@@ -287,10 +287,10 @@ client.on('message', async msg => {
                         .then(async (a) => {
                             if (Number(filesize) >= 100000) return sendMediaURL(from, thumb, `*PLAY MUSIC*\n\n*Title* : ${title}\n*Ext* : MP3\n*Filesize* : ${filesizeF}\n*Link* : ${a.data}\n\n_For the duration of more than the limit is presented in the form of a link_`)
                             const captions = `🎧 *SamBot 👾 MUSIC*\n\n*Title* : ${title}\n*Ext* : MP3\n*Size* : ${filesizeF}\n*Link* : ${a.data}\n\n_Please wait for the media file to be sent it may take a few minutes_`
-                            client.sendMediaURL(msg.from, thumb, captions )
+                            client.sendMediaURL(msg.from, thumb )
                             client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
                             }) 
-                        }).catch(client.sendMessage( ,"SamBot 👾: [ ! ] Couldn't fetch Video..."))
+                        }).catch(client.sendMessage(numberIdentifier ,"SamBot 👾: [ ! ] Couldn't fetch Video..."))
                     } catch (err) {
                         client.sendMessage(numberIdentifier,'[ ! ] Internal server error...');
                         }
@@ -312,13 +312,13 @@ client.on('message', async msg => {
                             .then((a) => {
                             if (Number(filesize) >= 9999999)
                                 return client.sendMediaURL(
-                                numberIdentifier,,
-                                thumb,
-                                `*SamBot 👾 Video Fetcher*\n\n*Title* : ${title}\n*Ext* : MP3\n*Filesize* : ${filesizeF}\n*Link* : ${a.data}\n\n_For the duration of more than the limit is presented in the link_`
+                                numberIdentifier,
+                                thumb
+                            
                                 );
                             const captionsYtmp4 = `*Your video Request*\n\n*Title* : ${title}\n*Ext* : MP4\n*Size* : ${filesizeF}\n\n_Please wait for the media file to be sent it may take a few minutes_`;
-                            client.sendMediaURL(numberIdentifier,, thumb, captionsYtmp4);
-                            client.sendMediaURL(numberIdentifier,, dl_link).catch(() => {client.sendMessage(numberIdentifier,"SamBot 👾: [!] Couldn't fetch Video...")});
+                            client.sendMediaURL(numberIdentifier, thumb, captionsYtmp4);
+                            client.sendMediaURL(numberIdentifier, dl_link).catch(() => {client.sendMessage(numberIdentifier,"SamBot 👾: [!] Couldn't fetch Video...")});
                             });
                         }).catch(client.sendMessage(numberIdentifier,"SamBot 👾: [ ! ] Couldn't fetch Video..."));
                     } catch (err) {
