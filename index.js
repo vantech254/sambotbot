@@ -301,13 +301,7 @@ client.on('message', async msg => {
                         msg.reply("[!] You did not provide a youtube link...");
                     }
     
-                    let yt_video_link = command[1].match(
-                        /(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/
-                    );
-                    if (!yt_video_link)
-                    {
-                        msg.reply("[ ! ] You did not provide a youtube link...");
-                    }
+                   
                     try {
                         msg.reply("SamBot 👾 Fetching video...");
                         ytvideo(command[1]).then((res) => {
