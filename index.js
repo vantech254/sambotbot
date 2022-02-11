@@ -48,11 +48,11 @@ const offlineReplyImage = MessageMedia.fromFilePath('./images/profilepic/sambot.
 client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
 
-    console.log(colors.FgYellow,'==============Whatsapp Web QR RECEIVED==================');
+    console.log(colors.FgWhite,'==============Whatsapp Web QR RECEIVED==================');
 });
 
 client.on('authenticated', () => {
-    console.log(colors.FgWhite, 'Sambot Auth successfull...');
+    console.log(colors.FgGreen, 'Sambot Auth successfull...');
 });
 
 client.on('auth_failure', msg => {
@@ -70,7 +70,7 @@ client.on('message', async msg => {
     
     var chatIdentifier = msg.from.substring(msg.from.length-5);
     var  numberIdentifier = msg.from;
-    let incoming_message = msg.body.toLowercase();
+    let incoming_message = msg.body.toLowerCase();
     const command = incoming_message.split(" ");
     
     // Messages send to my DM
