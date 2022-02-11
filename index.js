@@ -70,7 +70,7 @@ client.on('message', async msg => {
     
     var chatIdentifier = msg.from.substring(msg.from.length-5);
     var  numberIdentifier = msg.from;
-    let incoming_message = msg.body.toLowercase();
+    let incoming_message = msg.body.toLowerCase();
     const command = incoming_message.split(" ");
     
     // Messages send to my DM
