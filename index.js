@@ -40,7 +40,7 @@ http.createServer((req, res)=>{
 const client = new Client({ puppeteer: { headless: true, args:["--no-sandbox"] }, clientId: 'example' });
 client.initialize();
 
-const repliedDms= [];
+let repliedDms= [];
 //Loading image
 const offlineReplyImage = MessageMedia.fromFilePath('./images/profilepic/sambot.png');
 
