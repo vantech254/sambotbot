@@ -369,6 +369,7 @@ client.on('group_leave', (notification) => {
     // User has left or been kicked from the group.
     console.log('leave', notification);
     notification.reply('User left.');
+    
 });
 
 client.on('group_update', (notification) => {
