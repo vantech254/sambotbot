@@ -325,7 +325,7 @@ client.on('message', async msg => {
                             client.sendMediaURL(msg.from, thumb, captionsYtmp4);
                             client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [ ! ] Couldn't fetch Video...")});
                             });
-                        });
+                        }).catch(msg.reply("SamBot 👾: [!] Couldn't fetch Video..."));
                     } catch (err) {
                         msg.reply("SamBot 👾: [ ! ] Couldn't fetch Video...")
                     }
