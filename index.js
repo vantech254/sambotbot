@@ -270,18 +270,20 @@ client.on('message', async msg => {
                     }
                     
               
-                    let raw_url = String(command[1]) ;
+                    let raw_url = String(command[1]);
+
                     let main = raw_url.slice(8);
+
                     let main_url = "http://www."+main.split(" ").join("");
+
                     console.log(main_url);
+
                     validator.validateUrl(main_url, function(res, err) {
-                    if(err) //err
-                    {
-                        console.log(err);
-                        msg.reply("[ ! ] Invalid Url link...")
-                    }
-                    else
-                     {
+                        if(err) //err
+                        {
+                            console.log(err);
+                            msg.reply("[ ! ] Invalid Url link...");
+                        }
                         let dl_flag = 0;
                         let res_url = "http://www.youtube.com"+res.split(" ").join("");
                         const yt_id = ytdl.getURLVideoID(res_url);
@@ -311,7 +313,7 @@ client.on('message', async msg => {
                                 })
                             });
                             
-                        
+                        }
                         if(dl_flag==1)
                         {
                             ytvideo(res_url).then(()=>{
@@ -320,10 +322,10 @@ client.on('message', async msg => {
                                 msg.reply(sendVideo, {caption: "SamBot 👾 Found your video."})
                             }).catch(()=>{
                                 msg.reply("SamBot 👾 [ ! ] Couldn't get video.");
-                            })
+                            });
                         }
-
-                    break;   
+                    })
+                break;   
                     
             case ".help":
                 client.sendMessage(msg.from, offlineReplyImage, {caption: "*Hi there*👋🏿👋🏿👋🏿\n\n======*Help List*======\n1: .help =To see the SamBot 👾 Help list.\n2: .video Or .ytmp4 =To download youtube video through a link.\n3: .ytmp3 .audio = To search for songs a download them.\n4: .dict = To search any english word through the Bot's dictionary API.\n5: .speed Or .pong Or .ping = To check your internet download speed.\n 6: .wiki = To get Oficial wikipedia links to your search term. \n~SamBot 👾"});
