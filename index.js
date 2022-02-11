@@ -246,7 +246,6 @@ client.on('message', async msg => {
                           msg.reply("[!] An Error occured Youtube search aborted...");
                       }
                     let results = yt_result.all;
-                    var tbuff = await getBuffer(results[0].image);
                     var ytresult = "";
                     ytresult += "「 *SamBot 👾 YOUTUBE SEARCH* 」";
                     ytresult += "\n________________________\n\n";
