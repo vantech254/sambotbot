@@ -282,11 +282,10 @@ client.on('message', async msg => {
                 try {
                     ytaudio(yt_url)
                     .then((res) => {
-                        const { dl_link, thumb, title, filesizeF, filesize } = res;
+                        const { dl_link, thumb} = res;
                         axios.get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
                         .then(async (a) => {
-                            if (Number(filesize) >= 100000) return sendMediaURL(from, thumb, `*PLAY MUSIC*\n\n*Title* : ${title}\n*Ext* : MP3\n*Filesize* : ${filesizeF}\n*Link* : ${a.data}\n\n_For the duration of more than the limit is presented in the form of a link_`)
-                            const captions = `🎧 *SamBot 👾 MUSIC*\n\n*Title* : ${title}\n*Ext* : MP3\n*Size* : ${filesizeF}\n*Link* : ${a.data}\n\n_Please wait for the media file to be sent it may take a few minutes_`
+                           
                             client.sendMediaURL(msg.from, thumb )
                             client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
                             }) 
@@ -306,18 +305,11 @@ client.on('message', async msg => {
                     try {
                         msg.reply("SamBot 👾 Fetching video...");
                         ytvideo(command[1]).then((res) => {
-                        const { dl_link, thumb, title, filesizeF, filesize } = res;
+                        const { dl_link, thumb} = res;
                         axios
                             .get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
                             .then((a) => {
-                            if (Number(filesize) >= 9999999)
-                                return client.sendMediaURL(
-                                numberIdentifier,
-                                thumb
-                            
-                                );
-                            const captionsYtmp4 = `*Your video Request*\n\n*Title* : ${title}\n*Ext* : MP4\n*Size* : ${filesizeF}\n\n_Please wait for the media file to be sent it may take a few minutes_`;
-                            client.sendMediaURL(numberIdentifier, thumb, captionsYtmp4);
+                            client.sendMediaURL(numberIdentifier, thumb);
                             client.sendMediaURL(numberIdentifier, dl_link).catch(() => {client.sendMessage(numberIdentifier,"SamBot 👾: [!] Couldn't fetch Video...")});
                             });
                         }).catch(client.sendMessage(numberIdentifier,"SamBot 👾: [ ! ] Couldn't fetch Video..."));
