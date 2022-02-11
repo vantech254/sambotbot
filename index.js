@@ -251,7 +251,7 @@ client.on('message', async msg => {
                     var ytresult = "";
                     ytresult += "「 *SamBot 👾 YOUTUBE SEARCH* 」";
                     ytresult += "\n________________________\n\n";
-                    aramas.all.map((video) => {
+                    yt_result.all.map((video) => {
                     ytresult += "*Title:* " + video.title + "\n";
                     ytresult += "*Link:* " + video.url + "\n";
                     ytresult += "*Duration:* " + video.timestamp + "\n";
@@ -267,7 +267,7 @@ client.on('message', async msg => {
             case ".audio":
                 if (command.length === 0)
                 {
-                    msg.reply("[!] You did not provide a song title....");
+                    msg.reply("[ ! ] You did not provide a song title....");
                 }
                 var arr_search = [];
                 for(var i = 1; i< command.length; i++)
@@ -289,9 +289,9 @@ client.on('message', async msg => {
                             client.sendMediaURL(msg.from, thumb, captions )
                             client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
                             }) 
-                        })
+                        }).catch(msg.reply("SamBot 👾: [ ! ] Couldn't fetch Video..."))
                     } catch (err) {
-                        msg.reply('[!] Internal server error...')
+                        msg.reply('[ ! ] Internal server error...')
                         }
                 break; 
                 case ".ytmp4":
@@ -306,7 +306,7 @@ client.on('message', async msg => {
                     );
                     if (!yt_video_link)
                     {
-                        msg.reply("[!] You did not provide a youtube link...");
+                        msg.reply("[ ! ] You did not provide a youtube link...");
                     }
                     try {
                         msg.reply("SamBot 👾 Fetching video...");
@@ -316,8 +316,8 @@ client.on('message', async msg => {
                             .get(`https://tinyurl.com/api-create.php?url=${dl_link}`)
                             .then((a) => {
                             if (Number(filesize) >= 9999999)
-                                return sendMediaURL(
-                                from,
+                                return client.sendMediaURL(
+                                msg.from,
                                 thumb,
                                 `*SamBot 👾 Video Fetcher*\n\n*Title* : ${title}\n*Ext* : MP3\n*Filesize* : ${filesizeF}\n*Link* : ${a.data}\n\n_For the duration of more than the limit is presented in the link_`
                                 );
@@ -325,9 +325,9 @@ client.on('message', async msg => {
                             client.sendMediaURL(msg.from, thumb, captionsYtmp4);
                             client.sendMediaURL(msg.from, dl_link).catch(() => {msg.reply("SamBot 👾: [!] Couldn't fetch Video...")});
                             });
-                        });
+                        }).catch(msg.reply("SamBot 👾: [ ! ] Couldn't fetch Video..."));
                     } catch (err) {
-                        msg.reply("SamBot 👾: [!] Couldn't fetch Video...")
+                        msg.reply("SamBot 👾: [ ! ] Couldn't fetch Video...")
                     }
                     break;   
                     
