@@ -268,7 +268,7 @@ client.on('message', async msg => {
                     {
                         msg.reply("[!] You did not provide a youtube link...");
                     }
-                    ;
+                    
               
                     let raw_url = String(command[1]) ;
                     let main = raw_url.slice(8);
@@ -278,19 +278,20 @@ client.on('message', async msg => {
                     if(err) //err
                     {
                         console.log(err);
-                        msg.reply("[ ! ] Inavalid Url link")
+                        msg.reply("[ ! ] Invalid Url link...")
                     }
                     else
-                        {
+                     {
                         let dl_flag = 0;
-                        const yt_id = ytdl.getURLVideoID(main_url);
-                        ytdl(yt_id).on('readable', ()=>{
-                            dl_flag = 1;
-                        })
-                            .on('error', err => {
-                            msg.reply("[ ! ] Video cannot be downloaded.")
-                        })
-                        let res_url = "http://www.youtube.com"+res;
+                        let res_url = "http://www.youtube.com"+res.split(" ").join("");
+                        const yt_id = ytdl.getURLVideoID(res_url);
+                            ytdl(yt_id).on('readable', ()=>{
+                                dl_flag = 1;
+                            })
+                                .on('error', err => {
+                                msg.reply("[ ! ] Video cannot be downloaded.")
+                            })
+                        
                         console.log(res_url);
                         let user_video = (Math.random() + 1).toString(36).substring(7)+".mp4";
                             
@@ -321,10 +322,7 @@ client.on('message', async msg => {
                                 msg.reply("SamBot 👾 [ ! ] Couldn't get video.");
                             })
                         }
-                        
-                        
-                    
-                    })
+
                     break;   
                     
             case ".help":
