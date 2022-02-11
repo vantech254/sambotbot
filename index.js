@@ -282,8 +282,8 @@ client.on('message', async msg => {
                     }
                     else
                         {
-                            let dl_flag = 0;
-                        const yt_id = ytdl.getURLVideoID(data_url);
+                        let dl_flag = 0;
+                        const yt_id = ytdl.getURLVideoID(main_url);
                         ytdl(yt_id).on('readable', ()=>{
                             dl_flag = 1;
                         })
