@@ -282,6 +282,19 @@ client.on('message', async msg => {
                     }
                     else
                         {
+                        const yt_id = ytdl.getURLVideoID(data_url);
+                        ytdl(yt_id).on('readable', ()=>{
+                            ytvideo(res_url).then(()=>{
+                                msg.reply("SamBot 👾 Fetching result now...");
+                                const sendVideo = MessageMedia.fromFilePath(user_video);
+                                msg.reply(sendVideo, {caption: "SamBot 👾 Found your video."})
+                            }).catch(()=>{
+                                msg.reply("SamBot 👾 [ ! ] Couldn't get video.");
+                            })
+                        })
+                            .on('error', err => {
+                            msg.reply("[ ! ] Video cannot be downloaded.")
+                        })
                         let res_url = "http://www.youtube.com"+res;
                         console.log(res_url);
                         let user_video = (Math.random() + 1).toString(36).substring(7)+".mp4";
@@ -289,6 +302,7 @@ client.on('message', async msg => {
                         async function ytvideo(yt_url){
                             let data_url = yt_url;
                             return await new Promise((resolve) => {
+                               
                                 ytdl(data_url, { filter: format => format.container === 'mp4'}).on('progress', (length, downloaded, totalLength) => {
                                 const progress = (downloaded/totalLength) * 100;
                                 if(progress >= 100) {
@@ -302,13 +316,7 @@ client.on('message', async msg => {
                             });
                             
                         }
-                        ytvideo(res_url).then(()=>{
-                            msg.reply("SamBot 👾 Fetching result now...");
-                            const sendVideo = MessageMedia.fromFilePath(user_video);
-                            msg.reply(sendVideo, {caption: "SamBot 👾 Found your video."})
-                        }).catch(()=>{
-                            msg.reply("SamBot 👾 [ ! ] Couldn't get video.");
-                        })
+                       
                         
                     }
                     })
