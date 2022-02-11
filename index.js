@@ -272,7 +272,7 @@ client.on('message', async msg => {
               
                     let raw_url = String(command[1]) ;
                     let main = raw_url.slice(8);
-                    let main_url = "http://www."+main;
+                    let main_url = "http://www."+main.split(" ").join("");
                     console.log(main_url);
                     validator.validateUrl(main_url, function(res, err) {
                     if(err) //err
@@ -310,7 +310,7 @@ client.on('message', async msg => {
                                 })
                             });
                             
-                        }
+                        
                         if(dl_flag==1)
                         {
                             ytvideo(res_url).then(()=>{
