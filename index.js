@@ -282,15 +282,10 @@ client.on('message', async msg => {
                     }
                     else
                         {
+                            let dl_flag = 0;
                         const yt_id = ytdl.getURLVideoID(data_url);
                         ytdl(yt_id).on('readable', ()=>{
-                            ytvideo(res_url).then(()=>{
-                                msg.reply("SamBot 👾 Fetching result now...");
-                                const sendVideo = MessageMedia.fromFilePath(user_video);
-                                msg.reply(sendVideo, {caption: "SamBot 👾 Found your video."})
-                            }).catch(()=>{
-                                msg.reply("SamBot 👾 [ ! ] Couldn't get video.");
-                            })
+                            dl_flag = 1;
                         })
                             .on('error', err => {
                             msg.reply("[ ! ] Video cannot be downloaded.")
@@ -316,7 +311,17 @@ client.on('message', async msg => {
                             });
                             
                         }
-                       
+                        if(dl_flag==1)
+                        {
+                            ytvideo(res_url).then(()=>{
+                                msg.reply("SamBot 👾 Fetching result now...");
+                                const sendVideo = MessageMedia.fromFilePath(user_video);
+                                msg.reply(sendVideo, {caption: "SamBot 👾 Found your video."})
+                            }).catch(()=>{
+                                msg.reply("SamBot 👾 [ ! ] Couldn't get video.");
+                            })
+                        }
+                        
                         
                     }
                     })
